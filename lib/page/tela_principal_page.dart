@@ -90,21 +90,20 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
                   child: const Text("Cancelar")),
               if (!readOnly)
               TextButton(
-                  onPressed: () => {
+                  onPressed: () {
                     if (key.currentState != null &&
                         key.currentState!.dadosValidados())
                       {
-                        setState(() {
-                          final novo = key.currentState!.novo;
-                          if (index == null) {
-                            novo.id = ++_ultimoId;
-                            list.add(novo);
-                          } else {
-                            list[index] = novo;
-                          }
-
                           Navigator.pop(context);
-                        })
+                          final novo = key.currentState!.novo;
+                          _dao.salvar(novo).then((success) {
+                            if (success) {
+                              _atualizarLista();
+                            }
+
+
+
+                        });
                       }
                   },
                   child: const Text("Salvar"))
@@ -175,8 +174,13 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
     Widget continueButton = TextButton(
       child: const Text("Sim"),
       onPressed:  () {
-        setState(() {
-          list.remove(list[index]);
+        if (list[index].id == 0) {
+          return;
+        }
+        _dao.remover(list[index].id).then((success) {
+          if (success) {
+            _atualizarLista();
+          }
         });
 
         Navigator.pop(context);

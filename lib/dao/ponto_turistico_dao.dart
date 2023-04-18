@@ -8,7 +8,7 @@ class PontoTuristicoDao {
   Future<bool> salvar(PontoTuristico ponto) async {
     final database = await databaseProvider.database;
     final valores = ponto.toMap();
-    if (ponto.id == null) {
+    if (ponto.id == 0) {
       ponto.id = await database.insert(PontoTuristico.nomeTabela, valores);
       return true;
     } else {

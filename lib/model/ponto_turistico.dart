@@ -30,7 +30,7 @@ class PontoTuristico {
   }
 
   Map<String, dynamic> toMap() => {
-    campoId: id,
+    campoId: id == 0 ? null : id,
     campoDescricao: descricao,
     campoDetalhes: detalhes,
     campoDiferenciais: diferenciais,
