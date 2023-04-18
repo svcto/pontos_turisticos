@@ -19,6 +19,7 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
   final formKey = GlobalKey<FormState>();
   final descricaoController = TextEditingController();
   final diferenciaisController = TextEditingController();
+  final detalhesController = TextEditingController();
   final inclusaoController = TextEditingController();
   final _dateFormat = DateFormat("dd/MM/yyy");
 
@@ -29,6 +30,9 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
       descricaoController.text = widget.pontoTuristico!.descricao;
       diferenciaisController.text = widget.pontoTuristico!.diferenciais;
       inclusaoController.text = widget.pontoTuristico!.inclusaoFormatada;
+      detalhesController.text = widget.pontoTuristico!.detalhes;
+    } else {
+      inclusaoController.text = _dateFormat.format(DateTime.now());
     }
   }
 
@@ -55,6 +59,7 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
       id: widget.pontoTuristico?.id ?? 0,
       descricao: descricaoController.text,
       diferenciais: diferenciaisController.text,
+      detalhes: detalhesController.text,
       inclusao: inclusaoController.text.isEmpty ?
       null : _dateFormat.parse(inclusaoController.text)
   );
@@ -69,6 +74,15 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
           validator: (String? valor) {
             if (valor == null || valor.isEmpty) {
               return "Informe a descrição!";
+            }
+            return null;
+          },
+        ),
+        TextFormField(controller: detalhesController,
+          decoration: const InputDecoration(labelText: "Detalhes"),
+          validator: (String? valor) {
+            if (valor == null || valor.isEmpty) {
+              return "Informe os detalhes!";
             }
             return null;
           },

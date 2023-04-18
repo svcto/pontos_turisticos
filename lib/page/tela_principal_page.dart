@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pontos_turisticos/dao/ponto_turistico_dao.dart';
 import 'package:pontos_turisticos/model/ponto_turistico.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/ponto_turistico_cadastro.dart';
+import 'filtro_page.dart';
 
 class TelaPrincipalPage extends StatefulWidget {
   const TelaPrincipalPage({super.key});
@@ -15,13 +18,15 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
   static const acaoEditar = 'editar';
   static const acaoExcluir = 'excluir';
 
+  var _carregando = false;
+  final _dao = PontoTuristicoDao();
   final list = <PontoTuristico>[
-    PontoTuristico(
-      id: 1,
-      descricao: "Cataratas do Iguaçu",
-      diferenciais: "Tem água",
-      inclusao: DateTime.now()
-    )
+    // PontoTuristico(
+    //   id: 1,
+    //   descricao: "Cataratas do Iguaçu",
+    //   diferenciais: "Tem água",
+    //   inclusao: DateTime.now()
+    // )
   ];
 
   var _ultimoId = 1;
@@ -30,9 +35,43 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
     return AppBar(
       title: const Text("Pontos Turísticos"),
       actions: [
-        IconButton(onPressed: () => {}, icon: const Icon(Icons.filter_list)),
+        IconButton(onPressed: _abrirPaginaFiltro, icon: const Icon(Icons.filter_list)),
       ],
     );
+  }
+
+  void _abrirPaginaFiltro() async {
+    final navigator = Navigator.of(context);
+    final alterouValores = await navigator.pushNamed(FiltroPage.routeName);
+    if (alterouValores == true) {
+      _atualizarLista();
+    }
+  }
+
+  void _atualizarLista() async {
+    setState(() {
+      _carregando = true;
+    });
+    // Carregar os valores do SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final campoOrdenacao =
+        prefs.getString(FiltroPage.chaveCampoOrdenacao) ?? PontoTuristico.campoId;
+    final usarOrdemDecrescente =
+        prefs.getBool(FiltroPage.chaveUsarOrdemDescrescente) == true;
+    final filtroDescricao =
+        prefs.getString(FiltroPage.chaveCampoDescricao) ?? '';
+    final pontos = await _dao.listar(
+      filtro: filtroDescricao,
+      campoOrdenacao: campoOrdenacao,
+      usarOrdemDecrescente: usarOrdemDecrescente,
+    );
+    setState(() {
+      _carregando = false;
+      list.clear();
+      if (pontos.isNotEmpty) {
+        list.addAll(pontos);
+      }
+    });
   }
 
   void _abrirForm({PontoTuristico? item, int? index, required bool readOnly}) {

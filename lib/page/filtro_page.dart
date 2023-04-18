@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pontos_turisticos/model/ponto_turistico.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +7,7 @@ class FiltroPage extends StatefulWidget {
   static const chaveCampoOrdenacao = "campoOrdenacao";
   static const chaveUsarOrdemDescrescente = "usarOrdemDescrescente";
   static const chaveCampoDescricao = "campoDescricao";
-  static const chaveCampoDiferenciais = "campoDiferenciais";
+  static const chaveCampoDetalhes = "campoDetalhes";
 
   @override
   FiltroPageState createState() => FiltroPageState();
@@ -18,12 +17,13 @@ class FiltroPageState extends State<FiltroPage> {
   final _camposParaOrdenacao = {
     PontoTuristico.campoId: 'Código',
     PontoTuristico.campoDescricao: 'Descrição',
+    PontoTuristico.campoDetalhes: 'Detalhes',
     PontoTuristico.campoDiferenciais: 'Diferenciais',
     PontoTuristico.campoInclusao: 'Inclusão'
   };
   late final SharedPreferences _prefes;
   final TextEditingController _descricaoController = TextEditingController();
-  final TextEditingController _diferenciaisController = TextEditingController();
+  final TextEditingController _detalhesController = TextEditingController();
   String _campoOrdenacao = PontoTuristico.campoId;
   bool _usarOrdemDescrescente = false;
   bool _alterouValores = false;
@@ -42,8 +42,8 @@ class FiltroPageState extends State<FiltroPage> {
           _prefes.getBool(FiltroPage.chaveUsarOrdemDescrescente) == true;
       _descricaoController.text =
           _prefes.getString(FiltroPage.chaveCampoDescricao) ?? '';
-      _diferenciaisController.text =
-          _prefes.getString(FiltroPage.chaveCampoDiferenciais) ?? '';
+      _detalhesController.text =
+          _prefes.getString(FiltroPage.chaveCampoDetalhes) ?? '';
     });
   }
 
@@ -76,21 +76,21 @@ class FiltroPageState extends State<FiltroPage> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: TextField(
             decoration: const InputDecoration(
-              labelText: 'Descrição começa com...',
+              labelText: 'Descrição ou detalhes começa com...',
             ),
             controller: _descricaoController,
             onChanged: _onFiltroDescricaoChanged),
       ),
 
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: TextField(
-            decoration: const InputDecoration(
-              labelText: 'Diferenciais começa com...',
-            ),
-            controller: _diferenciaisController,
-            onChanged: _onFiltroDiferenciaisChanged),
-      )
+      // Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: 10),
+      //   child: TextField(
+      //       decoration: const InputDecoration(
+      //         labelText: 'Detalhes começa com...',
+      //       ),
+      //       controller: _detalhesController,
+      //       onChanged: _onFiltroDiferenciaisChanged),
+      // )
     ]);
   }
 
@@ -100,7 +100,7 @@ class FiltroPageState extends State<FiltroPage> {
   }
 
   void _onFiltroDiferenciaisChanged(String? value) {
-    _prefes.setString(FiltroPage.chaveCampoDiferenciais, value!);
+    _prefes.setString(FiltroPage.chaveCampoDetalhes, value!);
     _alterouValores = true;
   }
 
