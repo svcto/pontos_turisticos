@@ -39,7 +39,7 @@ class PontoTuristicoDao {
   }) async {
     String? where;
     if (filtro.isNotEmpty) {
-      where = "UPPER(${PontoTuristico.campoDescricao}) LIKE '${filtro.toUpperCase()}%'"
+      where = "UPPER(${PontoTuristico.campoNome}) LIKE '${filtro.toUpperCase()}%'"
           " OR UPPER(${PontoTuristico.campoDetalhes}) LIKE '${filtro.toUpperCase()}%'";
     }
     var orderBy = campoOrdenacao;
@@ -51,7 +51,7 @@ class PontoTuristicoDao {
       PontoTuristico.nomeTabela,
       columns: [
         PontoTuristico.campoId,
-        PontoTuristico.campoDescricao,
+        PontoTuristico.campoNome,
         PontoTuristico.campoDiferenciais,
         PontoTuristico.campoInclusao,
         PontoTuristico.campoDetalhes

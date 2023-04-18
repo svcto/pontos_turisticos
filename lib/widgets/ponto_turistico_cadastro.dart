@@ -17,7 +17,7 @@ class PontoTuristicoCadastro extends StatefulWidget {
 
 class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
   final formKey = GlobalKey<FormState>();
-  final descricaoController = TextEditingController();
+  final nomeController = TextEditingController();
   final diferenciaisController = TextEditingController();
   final detalhesController = TextEditingController();
   final inclusaoController = TextEditingController();
@@ -27,7 +27,7 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
   void initState() {
     super.initState();
     if (widget.pontoTuristico != null) {
-      descricaoController.text = widget.pontoTuristico!.descricao;
+      nomeController.text = widget.pontoTuristico!.nome;
       diferenciaisController.text = widget.pontoTuristico!.diferenciais;
       inclusaoController.text = widget.pontoTuristico!.inclusaoFormatada;
       detalhesController.text = widget.pontoTuristico!.detalhes;
@@ -57,7 +57,7 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
 
   PontoTuristico get novo => PontoTuristico(
       id: widget.pontoTuristico?.id ?? 0,
-      descricao: descricaoController.text,
+      nome: nomeController.text,
       diferenciais: diferenciaisController.text,
       detalhes: detalhesController.text,
       inclusao: inclusaoController.text.isEmpty ?
@@ -66,14 +66,14 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(key: formKey, child: Column(
+    return Form(key: formKey, child: SingleChildScrollView(child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TextFormField(controller: descricaoController,
+        TextFormField(controller: nomeController,
           decoration: const InputDecoration(labelText: "Descrição"),
           validator: (String? valor) {
             if (valor == null || valor.isEmpty) {
-              return "Informe a descrição!";
+              return "Informe o nome!";
             }
             return null;
           },
@@ -97,17 +97,10 @@ class PontoTuristicoCadastroState extends State<PontoTuristicoCadastro> {
           },
         ),
         TextFormField(controller: inclusaoController,
-          decoration: InputDecoration(labelText: "Inclusão",
-              prefixIcon: IconButton(icon: const Icon(Icons.calendar_month),
-                onPressed: _mostrarCalendario,
-              ),
-              suffixIcon: IconButton(icon: const Icon(Icons.close),
-                onPressed: () => inclusaoController.clear(),
-              )
-          ),
+          decoration: InputDecoration(labelText: "Inclusão" ),
           readOnly: true,
         )
       ],
-    ));
+    )) );
   }
 }

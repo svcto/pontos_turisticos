@@ -2,7 +2,7 @@ import 'package:pontos_turisticos/model/ponto_turistico.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseProvider {
-  static const _dbName = 'pontos_turisticos.db';
+  static const _dbName = 'pontos_turisticos_md.db';
   static const _dbVersion = 1;
 
   DatabaseProvider._init();
@@ -27,7 +27,7 @@ class DatabaseProvider {
     await db.execute(''' 
       CREATE TABLE ${PontoTuristico.nomeTabela} (
         ${PontoTuristico.campoId} INTEGER PRIMARY KEY AUTOINCREMENT,
-        ${PontoTuristico.campoDescricao} TEXT NOT NULL,
+        ${PontoTuristico.campoNome} TEXT NOT NULL,
         ${PontoTuristico.campoDetalhes} TEXT,
         ${PontoTuristico.campoDiferenciais} TEXT,
         ${PontoTuristico.campoInclusao} TEXT

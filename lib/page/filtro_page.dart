@@ -6,7 +6,7 @@ class FiltroPage extends StatefulWidget {
   static const routeName = '/filtro';
   static const chaveCampoOrdenacao = "campoOrdenacao";
   static const chaveUsarOrdemDescrescente = "usarOrdemDescrescente";
-  static const chaveCampoDescricao = "campoDescricao";
+  static const chaveCampoNome = "campoNome";
   static const chaveCampoDetalhes = "campoDetalhes";
 
   @override
@@ -16,13 +16,13 @@ class FiltroPage extends StatefulWidget {
 class FiltroPageState extends State<FiltroPage> {
   final _camposParaOrdenacao = {
     PontoTuristico.campoId: 'Código',
-    PontoTuristico.campoDescricao: 'Descrição',
+    PontoTuristico.campoNome: 'Nome',
     PontoTuristico.campoDetalhes: 'Detalhes',
     PontoTuristico.campoDiferenciais: 'Diferenciais',
     PontoTuristico.campoInclusao: 'Inclusão'
   };
   late final SharedPreferences _prefes;
-  final TextEditingController _descricaoController = TextEditingController();
+  final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _detalhesController = TextEditingController();
   String _campoOrdenacao = PontoTuristico.campoId;
   bool _usarOrdemDescrescente = false;
@@ -40,8 +40,8 @@ class FiltroPageState extends State<FiltroPage> {
           _prefes.getString(FiltroPage.chaveCampoOrdenacao) ?? PontoTuristico.campoId;
       _usarOrdemDescrescente =
           _prefes.getBool(FiltroPage.chaveUsarOrdemDescrescente) == true;
-      _descricaoController.text =
-          _prefes.getString(FiltroPage.chaveCampoDescricao) ?? '';
+      _nomeController.text =
+          _prefes.getString(FiltroPage.chaveCampoNome) ?? '';
       _detalhesController.text =
           _prefes.getString(FiltroPage.chaveCampoDetalhes) ?? '';
     });
@@ -78,8 +78,8 @@ class FiltroPageState extends State<FiltroPage> {
             decoration: const InputDecoration(
               labelText: 'Descrição ou detalhes começa com...',
             ),
-            controller: _descricaoController,
-            onChanged: _onFiltroDescricaoChanged),
+            controller: _nomeController,
+            onChanged: _onFiltroNomeChanged),
       ),
 
       // Padding(
@@ -94,8 +94,8 @@ class FiltroPageState extends State<FiltroPage> {
     ]);
   }
 
-  void _onFiltroDescricaoChanged(String? value) {
-    _prefes.setString(FiltroPage.chaveCampoDescricao, value!);
+  void _onFiltroNomeChanged(String? value) {
+    _prefes.setString(FiltroPage.chaveCampoNome, value!);
     _alterouValores = true;
   }
 

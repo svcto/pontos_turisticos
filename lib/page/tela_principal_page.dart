@@ -23,7 +23,7 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
   final list = <PontoTuristico>[
     // PontoTuristico(
     //   id: 1,
-    //   descricao: "Cataratas do Iguaçu",
+    //   nome: "Cataratas do Iguaçu",
     //   diferenciais: "Tem água",
     //   inclusao: DateTime.now()
     // )
@@ -58,10 +58,10 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
         prefs.getString(FiltroPage.chaveCampoOrdenacao) ?? PontoTuristico.campoId;
     final usarOrdemDecrescente =
         prefs.getBool(FiltroPage.chaveUsarOrdemDescrescente) == true;
-    final filtroDescricao =
-        prefs.getString(FiltroPage.chaveCampoDescricao) ?? '';
+    final filtroNome =
+        prefs.getString(FiltroPage.chaveCampoNome) ?? '';
     final pontos = await _dao.listar(
-      filtro: filtroDescricao,
+      filtro: filtroNome,
       campoOrdenacao: campoOrdenacao,
       usarOrdemDecrescente: usarOrdemDecrescente,
     );
@@ -129,7 +129,7 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
                   Container(
                       child: Row(
                         children: <Widget>[
-                          Text('${item.id} - ${item.descricao}'),
+                          Text('${item.id} - ${item.nome}'),
                           IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () {
@@ -202,6 +202,11 @@ class TelaPrincipalPageState extends State<TelaPrincipalPage> {
         return alert;
       },
     );
+  }
+
+  @override
+  void initState() {
+    _atualizarLista();
   }
 
   @override
